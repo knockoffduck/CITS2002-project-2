@@ -2,7 +2,7 @@
 
 void buildTroveFile(int argc, char **argv, ht_t *hashtable, int index) {
     int i = index;
-    printf("INITIALISING BUILD TROVE.......\n");
+    printf("\t BUILDING trove-file\n");
     hashtable = ht_create(CAPACITY);
     printf("CREATED HASHTABLE\n");
     for (; i < argc; i++) {
@@ -27,7 +27,7 @@ void updateTroveFile(int argc, char **argv, ht_t *hashtable, int index) {
     printf("UPDATING......\n");
     int i = index;
     hashtable = ht_create(CAPACITY);
-    unzipFile();
+    readzipFile();
     readTroveFile(hashtable);
     for (; i < argc; i++) {
         if (is_regular_file(argv[i])) charCounter(argv[i], hashtable);
@@ -49,7 +49,7 @@ void updateTroveFile(int argc, char **argv, ht_t *hashtable, int index) {
 }
 
 void removeFile(int argc, char **argv, ht_t *hashtable, int index) {
-    unzipFile();
+    readzipFile();
     int i = index;
     hashtable = ht_create(CAPACITY);
     readTroveFile(hashtable);
@@ -101,7 +101,7 @@ void removeFile(int argc, char **argv, ht_t *hashtable, int index) {
 }
 
 void searchWord(int argc, char **argv, ht_t *hashtable, int index) {
-    unzipFile();
+    readzipFile();
     printf("SEARCHING WORD.....\n");
     hashtable = ht_create(CAPACITY);
     readTroveFile(hashtable);
@@ -141,7 +141,6 @@ int main(int argc, char **argv) {
             break;
         }
     }    
-    printf("SELECTED: %d\n", SelectFunction);
 
     if (SelectFunction == 0) {
         searchWord(argc, argv, HT , index);

@@ -65,4 +65,4 @@ extern int charCounter(char *file, ht_t *hashtable);
 extern void changeWordLength(char *length);
 extern void listFilesToList(char *dirname, ht_t *hashtable);
 extern void zipFile();
-extern void unzipFile();
+extern void readzipFile();

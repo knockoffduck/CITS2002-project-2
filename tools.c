@@ -81,8 +81,10 @@ bool search(node* head, char *string)
 }
 
 void writeToFile(ht_t *hashtable) {
+    printf("\t writing trove-file\n");
     char* writeFile = fileTrove;
     const char *TABLE_FORMAT_OUT = "%d,%s,";
+    int words = 0;
     FILE *file = fopen(writeFile, "w+");
     node *head = NULL;
     if (file == NULL) {
@@ -95,6 +97,7 @@ void writeToFile(ht_t *hashtable) {
             continue;
         }
         fprintf(file, TABLE_FORMAT_OUT, i, entry->key);
+        words++;
         /*
         */
         while (entry != NULL) {
@@ -119,10 +122,10 @@ void writeToFile(ht_t *hashtable) {
         fprintf(file, ")");
         fprintf(file, "\n");
     }
+    printf("\t %d unique words\n", words);
 }
 
 int charCounter(char *file, ht_t *hashtable) {
-    printf("\n%s\n", file);
     FILE *pfile = openFile(file);
     char ch;
     int words, i;
@@ -131,6 +134,7 @@ int charCounter(char *file, ht_t *hashtable) {
      * Logic to count characters, words and lines.
      */
     words = i = 0;
+    printf("\t finding words in '%s'\n", file);
     if (isFileBinary(file) != true) {
         int filesize = getFileSize(file);
         char *curr_word =(char *)malloc(1);
@@ -144,7 +148,7 @@ int charCounter(char *file, ht_t *hashtable) {
                 {
                     words++;
                     //printf("\n");
-                    printf("index: %d\t%s\t%s\n", words, curr_word, file);
+                    //printf("index: %d\t%s\t%s\n", words, curr_word, file);
                     ht_set(hashtable, curr_word, file);
                 }
                 curr_word[0] = 0;
@@ -181,12 +185,13 @@ int charCounter(char *file, ht_t *hashtable) {
     }
     /* Close files to release resources */
     fclose(pfile);
-    
+    printf("\t found %d\n", words);
 
     return 0;
 }
 
 void listFiles(char *dirname, ht_t *hashtable) {
+    printf("\t reading directory '%s'\n", dirname);
     DIR* dir = opendir(dirname);
     if (dir == NULL) {
         return;
@@ -213,7 +218,6 @@ void listFiles(char *dirname, ht_t *hashtable) {
         }
         entity = readdir(dir);
     }
-
     closedir(dir);
     
 }
@@ -384,12 +388,10 @@ char *ht_get(ht_t *hashtable, char *key) {
     while (entry != NULL) {
         // proceed to next key if available
         if (search(head, entry->value) != true) {
-            printf("no such entry\n");
             push(&head, entry->value);
         }
         entry = entry->next;
         
-        printf("NEXT...\n");
     }
     printList(head);
     // reaching here means there were >= 1 entries but no key match
@@ -489,13 +491,14 @@ void readTroveFile(ht_t *hashtable) {
 }
 
 void zipFile() {
+    printf("\t compressing trove-file\n");
     char *filename = strdup(fileTrove);
     char *command = (char *)malloc(sizeof(char) * ARG_MAX);
     sprintf(command, "gzip -f '%s'", filename);
     system(command);
 }
 
-void unzipFile() {
+void readzipFile() {
     char *filename = strdup(fileTrove);
     char *command = (char *)malloc(sizeof(char) * ARG_MAX);
     sprintf(command, "zcat < '%s.gz'", filename);
