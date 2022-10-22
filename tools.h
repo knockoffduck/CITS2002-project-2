@@ -10,7 +10,6 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <getopt.h>
-#include <sys/syslimits.h>
 
 #endif
 
